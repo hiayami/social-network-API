@@ -18,6 +18,7 @@ connection.once('open', async () => {
     username: `${first}_${last}`,
     email: `${first.toLowerCase()}.${last.toLowerCase()}@example.com`,
     thoughts: [],
+    friends: [],
   }))
 
   const thoughts = thoughtsData.map(({ text }) => {
@@ -49,12 +50,20 @@ connection.once('open', async () => {
     }
   }
 
-  await User.insertMany(users)
-
-  console.table(users);
+  // Insert users to generate IDs. Then, re-query users, assign
+  // friends to each user, and update each document
+  const userDocs = await User.insertMany(users)
+  userDocs.forEach(userDoc => {
+    otherUsers = userDocs.filter(doc => doc._id !== userDoc._id)
+    const friend = otherUsers[Math.floor(Math.random() * otherUsers.length)]
+    if (!userDoc.friends.find(_id => friend._id)) {
+      userDoc.friends.push(friend._id)
+      friend.friends.push(userDoc._id)
+    }
+  })
+  await Promise.all(userDocs.map(doc => User.updateOne({ _id: doc._id }, { friends: doc.friends })))
+  
   console.info('Seeding complete! 🌱');
-
-
   process.exit(0);
 });
 
