@@ -7,5 +7,7 @@ router.route('/:id').get(userController.getUserById)
 router.route('/').post(userController.createUser)
 router.route('/:id').put(userController.updateUser)
 router.route('/:id').delete(userController.deleteUser)
+router.route('/:id/friends/:friendId').post(userController.addFriend)
+router.route('/:id/friends/:friendId').delete(userController.removeFriend)
 
 module.exports = router;

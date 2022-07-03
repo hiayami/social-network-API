@@ -20,12 +20,26 @@ module.exports = {
   },
   async createThought(req, res) {
     //TODO: push the created thought's _id to the associated user's thoughts array field
-    Thought.create(req.body)
-      .then((thought) => res.json(thought))
-      .catch((err) => {
+    try {
+        const thought = await Thought.create(req.body)
+        const user = await User.findById(req.body.userId)
+        if (!user.thoughts) {
+            user.thoughts = []
+        }
+        user.thoughts.push(thought._id)
+        await user.save()
+        res.json(thought)
+    } catch (e) {
         console.error(err);
-        res.status(500).json(err);
-      });
+      res.status(500).json(err);
+    }
+
+    // Thought.create(req.body)
+    //   .then((thought) => res.json(thought))
+    //   .catch((err) => {
+    //     console.error(err);
+    //     res.status(500).json(err);
+    //   });
   },
   updateThought(req, res) {
     Thought.updateOne(
@@ -78,7 +92,7 @@ module.exports = {
       res.json(result);
     } catch (err) {
       console.error(err);
-      res.staus(500).json(err);
+      res.status(500).json(err);
     }
   },
 };
