@@ -34,9 +34,12 @@ THEN I am able to successfully create and delete reactions to thoughts and add a
 Clone the repo
 ## Usage
 npm i and npm start from the command line
+<br>
 Included is a walkthrough video of how the application is run using the Insomnia app:
 
+https://drive.google.com/file/d/16bOhJmp9xOiQq6p5YAtrFD00HXJ1RfRe/view?usp=sharing
 
+![social-network-api](https://user-images.githubusercontent.com/98536530/177075344-e0a66535-499d-4581-9702-51750a5a1522.gif)
 
 ## License
 Read more about MIT License here: [MIT License](https://opensource.org/licenses/MIT)
